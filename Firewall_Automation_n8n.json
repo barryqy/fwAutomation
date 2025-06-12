@@ -1,0 +1,2159 @@
+{
+  "name": "My workflow 2",
+  "nodes": [
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.us.security.cisco.com/firewall/v1/inventory/devices/ftds/ztp",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={\n  \"licenses\": [\"BASE\", \"THREAT\", \"MALWARE\", \"URLFilter\"],\n  \"name\": \"{{ $json.Name }}\",\n  \"serialNumber\": \"{{ $json.SN }}\",\n  \"adminPassword\": \"{{ $json.Password }}\",\n  \"template\": {\n    \"uid\": \"{{ $json['Template ID'] }}\",\n    \"templateVariables\": [\n      {\n        \"name\": \"Local-Subnet\",\n        \"value\": \"{{ $json.Subnet }}\"\n      },\n      {\n        \"name\": \"Loopback\",\n        \"value\": \"{{ $json.Loopback }}\"\n      },\n      {\n        \"name\": \"VPN\",\n        \"value\": \"{{ $json.VPN }}\"\n      },\n      {\n        \"name\": \"WAN2\",\n        \"value\": \"{{ $json['WAN2-IP'] }}\"\n      }\n    ],\n  \"objectOverrides\": [\n            {\n                \"name\": \"WAN2-Gateway\",\n        \t\t\"type\": \"Host\",\n                \"uid\": \"024FF2FA-1C61-0ed3-0000-047244907983\",\n        \t\t\"value\": \"{{ $json['WAN2-GW'] }}\"\n            }\n        ]\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1000,
+        340
+      ],
+      "id": "0081b04d-3b85-42cd-9e27-cda600bd24fd",
+      "name": "ZTP",
+      "alwaysOutputData": false,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "FICWngHBkvM6APl3",
+          "name": "SCC Header"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "af9e9ac3-ad40-4071-b1b7-82f2e6d8e8df",
+              "leftValue": "={{ $json.cdoTransactionStatus }}",
+              "rightValue": "IN_PROGRESS",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1240,
+        340
+      ],
+      "id": "29a84acd-b1ef-41d0-aa3b-4461c24288c6",
+      "name": "Provision Susccessful?"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1mLdFohsvYNO72lxbMsVWnizA_8hpuvKXOPnCI-Xgvqs",
+          "mode": "list",
+          "cachedResultName": "Firewall Automation",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1mLdFohsvYNO72lxbMsVWnizA_8hpuvKXOPnCI-Xgvqs/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1704539741,
+          "mode": "list",
+          "cachedResultName": "Main",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1mLdFohsvYNO72lxbMsVWnizA_8hpuvKXOPnCI-Xgvqs/edit#gid=1704539741"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Provision": "={{ $json.cdoTransactionStatus }}",
+            "Transaction ID": "={{ $json.transactionUid }}"
+          },
+          "matchingColumns": [
+            "Transaction ID"
+          ],
+          "schema": [
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Provision",
+              "displayName": "Provision",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "SN",
+              "displayName": "SN",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Password",
+              "displayName": "Password",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "HA",
+              "displayName": "HA",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Model",
+              "displayName": "Model",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Subnet",
+              "displayName": "Subnet",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Loopback",
+              "displayName": "Loopback",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "VPN",
+              "displayName": "VPN",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "WAN1-IP",
+              "displayName": "WAN1-IP",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "WAN1-GW",
+              "displayName": "WAN1-GW",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "WAN2-IP",
+              "displayName": "WAN2-IP",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "WAN2-GW",
+              "displayName": "WAN2-GW",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Template ID",
+              "displayName": "Template ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Transaction ID",
+              "displayName": "Transaction ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        2620,
+        180
+      ],
+      "id": "057089c3-2153-4f4b-a25c-0f1ae916d520",
+      "name": "Success status",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "v4LzH1ssgU29000E",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1mLdFohsvYNO72lxbMsVWnizA_8hpuvKXOPnCI-Xgvqs",
+          "mode": "list",
+          "cachedResultName": "Firewall Automation",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1mLdFohsvYNO72lxbMsVWnizA_8hpuvKXOPnCI-Xgvqs/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1704539741,
+          "mode": "list",
+          "cachedResultName": "Main",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1mLdFohsvYNO72lxbMsVWnizA_8hpuvKXOPnCI-Xgvqs/edit#gid=1704539741"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ID": "={{ $('Template ID?').item.json.ID }}",
+            "Provision": "ERROR"
+          },
+          "matchingColumns": [
+            "ID"
+          ],
+          "schema": [
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Provision",
+              "displayName": "Provision",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Model",
+              "displayName": "Model",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "SN",
+              "displayName": "SN",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Password",
+              "displayName": "Password",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Subnet",
+              "displayName": "Subnet",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Internal IP",
+              "displayName": "Internal IP",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "WAN1 IP",
+              "displayName": "WAN1 IP",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "WAN2 IP",
+              "displayName": "WAN2 IP",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1720,
+        480
+      ],
+      "id": "6c92bad9-c9d7-4bc1-ab06-6ed5f776d43c",
+      "name": "Failed Status",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "v4LzH1ssgU29000E",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "=https://apix.cisco.com/sn2info/v2/coverage/details/serial_numbers/{{ $('Command').item.json.SN }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer  {{ $json.access_token }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1240,
+        120
+      ],
+      "id": "5fa44135-2868-4f23-9d6f-872ae5e1f4b6",
+      "name": "SN to Model Lookup",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.Provision }}",
+                    "rightValue": "AutoFill",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "0b160629-512d-41fd-a870-da6605f2bcce"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "AutoFill"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "8edc3e9e-f22b-4fe8-9aa4-96371e311141",
+                    "leftValue": "={{ $json.Provision }}",
+                    "rightValue": "Start",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Provision"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        520,
+        240
+      ],
+      "id": "f3b03353-72d7-4ce1-80ea-a3e4685eb6d0",
+      "name": "Command"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "14b09b98-1bb5-45b7-8f98-155b6623567a",
+              "leftValue": "={{ $json.SN }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        260,
+        420
+      ],
+      "id": "d30bb987-3e37-4854-a593-8a8549c979a8",
+      "name": "SN Provided?"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1mLdFohsvYNO72lxbMsVWnizA_8hpuvKXOPnCI-Xgvqs",
+          "mode": "list",
+          "cachedResultName": "Firewall Automation",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1mLdFohsvYNO72lxbMsVWnizA_8hpuvKXOPnCI-Xgvqs/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Main",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1mLdFohsvYNO72lxbMsVWnizA_8hpuvKXOPnCI-Xgvqs/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "SN": "MISSING VALUE",
+            "ID": "={{ $json.ID }}"
+          },
+          "matchingColumns": [
+            "ID"
+          ],
+          "schema": [
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Provision",
+              "displayName": "Provision",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Model",
+              "displayName": "Model",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "SN",
+              "displayName": "SN",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Password",
+              "displayName": "Password",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Subnet",
+              "displayName": "Subnet",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Internal IP",
+              "displayName": "Internal IP",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "WAN1 IP",
+              "displayName": "WAN1 IP",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "WAN2 IP",
+              "displayName": "WAN2 IP",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        520,
+        600
+      ],
+      "id": "5862865b-7604-48a0-9f27-18557d83d540",
+      "name": "Error SN missing",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "v4LzH1ssgU29000E",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1mLdFohsvYNO72lxbMsVWnizA_8hpuvKXOPnCI-Xgvqs",
+          "mode": "list",
+          "cachedResultName": "Firewall Automation",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1mLdFohsvYNO72lxbMsVWnizA_8hpuvKXOPnCI-Xgvqs/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1704539741,
+          "mode": "list",
+          "cachedResultName": "Main",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1mLdFohsvYNO72lxbMsVWnizA_8hpuvKXOPnCI-Xgvqs/edit#gid=1704539741"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Subnet": "=172.16.{{ $('Command').item.json.ID }}.1/24",
+            "Model": "={{ $json.serial_numbers[0].orderable_pid_list[0].orderable_pid }}",
+            "Loopback": "=172.31.254.{{ $('Command').item.json.ID }}/32",
+            "VPN": "=192.168.254.{{ $('Command').item.json.ID +100 }}/24",
+            "Template ID": "={{ $('Read Template').item.json['Template ID'] }}",
+            "ID": "={{ $('Command').item.json.ID }}",
+            "Provision": "AutoFilled"
+          },
+          "matchingColumns": [
+            "ID"
+          ],
+          "schema": [
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Provision",
+              "displayName": "Provision",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "SN",
+              "displayName": "SN",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Password",
+              "displayName": "Password",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Model",
+              "displayName": "Model",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Subnet",
+              "displayName": "Subnet",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Loopback",
+              "displayName": "Loopback",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "VPN",
+              "displayName": "VPN",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "WAN1 IP",
+              "displayName": "WAN1 IP",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "WAN2 IP",
+              "displayName": "WAN2 IP",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Template ID",
+              "displayName": "Template ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1460,
+        120
+      ],
+      "id": "8abc8383-83c1-4aa4-ac0d-2ff1e0959963",
+      "name": "Auto Fill",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "v4LzH1ssgU29000E",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1mLdFohsvYNO72lxbMsVWnizA_8hpuvKXOPnCI-Xgvqs",
+          "mode": "list",
+          "cachedResultName": "Firewall Automation",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1mLdFohsvYNO72lxbMsVWnizA_8hpuvKXOPnCI-Xgvqs/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 918271864,
+          "mode": "list",
+          "cachedResultName": "Template",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1mLdFohsvYNO72lxbMsVWnizA_8hpuvKXOPnCI-Xgvqs/edit#gid=918271864"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Name",
+              "lookupValue": "Standard-Branches"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        760,
+        120
+      ],
+      "id": "4f3969c6-8898-417f-89c2-cb22941cd8e1",
+      "name": "Read Template",
+      "alwaysOutputData": false,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "v4LzH1ssgU29000E",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "documentId": {
+          "__rl": true,
+          "value": "1mLdFohsvYNO72lxbMsVWnizA_8hpuvKXOPnCI-Xgvqs",
+          "mode": "list",
+          "cachedResultName": "Firewall Automation",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1mLdFohsvYNO72lxbMsVWnizA_8hpuvKXOPnCI-Xgvqs/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1704539741,
+          "mode": "list",
+          "cachedResultName": "Main",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1mLdFohsvYNO72lxbMsVWnizA_8hpuvKXOPnCI-Xgvqs/edit#gid=1704539741"
+        },
+        "event": "rowUpdate",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        60,
+        420
+      ],
+      "id": "093e22ca-5cbc-4261-a322-cdaf32a8e37b",
+      "name": "New Tasks",
+      "credentials": {
+        "googleSheetsTriggerOAuth2Api": {
+          "id": "dhHZGz2jpSVegJy5",
+          "name": "Google Sheets Trigger account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 10
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1940,
+        200
+      ],
+      "id": "642e92c1-7b5e-4728-bec2-0314791b12f0",
+      "name": "Wait",
+      "webhookId": "f6e7447d-950e-44bb-9aca-3a7544253bb1",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Provision Status').item.json.transactionPollingUrl }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2160,
+        200
+      ],
+      "id": "df2a7151-16c0-40d5-8d4c-1a27aa8bb8e5",
+      "name": "Check Status",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "FICWngHBkvM6APl3",
+          "name": "SCC Header"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.cdoTransactionStatus }}",
+                    "rightValue": "={{ $json.cdoTransactionStatus }}",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "8360ff70-5ea0-4cbd-ae71-ae32bdf8a915"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "IN_PROGRESS"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "4662abb3-8783-4ad2-a95b-dcd4334a4844",
+                    "leftValue": "={{ $json.cdoTransactionStatus }}",
+                    "rightValue": "ERROR",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "ERROR"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        1460,
+        320
+      ],
+      "id": "e9df10be-e03e-4a8a-9304-adb496e5f9a6",
+      "name": "Provision Status"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "a1e40633-d727-4292-b627-bb30768bb9ae",
+                    "leftValue": "={{ $json.cdoTransactionStatus }}",
+                    "rightValue": "DONE",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "DONE"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "1dc8306e-50dd-49ea-a214-761629d40799",
+                    "leftValue": "={{ $json.cdoTransactionStatus }}",
+                    "rightValue": "IN_PROGRESS",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "IN_PROGRESS"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "4662abb3-8783-4ad2-a95b-dcd4334a4844",
+                    "leftValue": "={{ $json.cdoTransactionStatus }}",
+                    "rightValue": "ERROR",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "ERROR"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        2380,
+        200
+      ],
+      "id": "771c1fad-4f0e-489c-bf98-321478b637ad",
+      "name": "Recheck status"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://id.cisco.com/oauth2/default/v1/token?",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "grant_type",
+              "value": "client_credentials"
+            },
+            {
+              "name": "client_id",
+              "value": "!!!YOUR_CLIENT_ID (https://developer.cisco.com/docs/support-apis/authentication/#authentication)"
+            },
+            {
+              "name": "client_secret",
+              "value": "!!!YOUR_CLIENT_SECRET (https://developer.cisco.com/docs/support-apis/authentication/#authentication)"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/x-www-form-urlencoded"
+            },
+            {
+              "name": "Accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1000,
+        120
+      ],
+      "id": "e4a0f716-818f-426d-8d03-ef582532589b",
+      "name": "Get Bearer",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "4d58da98-e1f9-4e22-91b9-3081483ca409",
+              "leftValue": "={{ $json['Template ID'] }}",
+              "rightValue": "^[[:alnum:]]{8}-[[:alnum:]]{4}-[[:alnum:]]{4}-[[:alnum:]]{4}-[[:alnum:]]{12}",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        760,
+        360
+      ],
+      "id": "5da0f4e4-0f55-4c2a-8bb6-7d40004dce6b",
+      "name": "Template ID?"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1mLdFohsvYNO72lxbMsVWnizA_8hpuvKXOPnCI-Xgvqs",
+          "mode": "list",
+          "cachedResultName": "Firewall Automation",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1mLdFohsvYNO72lxbMsVWnizA_8hpuvKXOPnCI-Xgvqs/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Main",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1mLdFohsvYNO72lxbMsVWnizA_8hpuvKXOPnCI-Xgvqs/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ID": "={{ $json.ID }}",
+            "Template ID": "NO_TEMPLATE_ID"
+          },
+          "matchingColumns": [
+            "ID"
+          ],
+          "schema": [
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Provision",
+              "displayName": "Provision",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "SN",
+              "displayName": "SN",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Password",
+              "displayName": "Password",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Model",
+              "displayName": "Model",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Subnet",
+              "displayName": "Subnet",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Loopback",
+              "displayName": "Loopback",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "VPN",
+              "displayName": "VPN",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "WAN1 IP",
+              "displayName": "WAN1 IP",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "WAN2 IP",
+              "displayName": "WAN2 IP",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Template ID",
+              "displayName": "Template ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1000,
+        540
+      ],
+      "id": "16bd533e-b5de-4767-93b5-c345d21b67f2",
+      "name": "Warn no Template",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "v4LzH1ssgU29000E",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1mLdFohsvYNO72lxbMsVWnizA_8hpuvKXOPnCI-Xgvqs",
+          "mode": "list",
+          "cachedResultName": "Firewall Automation",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1mLdFohsvYNO72lxbMsVWnizA_8hpuvKXOPnCI-Xgvqs/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1704539741,
+          "mode": "list",
+          "cachedResultName": "Main",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1mLdFohsvYNO72lxbMsVWnizA_8hpuvKXOPnCI-Xgvqs/edit#gid=1704539741"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ID": "={{ $('Template ID?').item.json.ID }}",
+            "Provision": "={{ $json.cdoTransactionStatus }}",
+            "Transaction ID": "={{ $json.transactionUid }}"
+          },
+          "matchingColumns": [
+            "ID"
+          ],
+          "schema": [
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Provision",
+              "displayName": "Provision",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "SN",
+              "displayName": "SN",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Password",
+              "displayName": "Password",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "HA",
+              "displayName": "HA",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Model",
+              "displayName": "Model",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Subnet",
+              "displayName": "Subnet",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Loopback",
+              "displayName": "Loopback",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "VPN",
+              "displayName": "VPN",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "WAN1-IP",
+              "displayName": "WAN1-IP",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "WAN1-GW",
+              "displayName": "WAN1-GW",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "WAN2-IP",
+              "displayName": "WAN2-IP",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "WAN2-GW",
+              "displayName": "WAN2-GW",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Template ID",
+              "displayName": "Template ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Transaction ID",
+              "displayName": "Transaction ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1720,
+        200
+      ],
+      "id": "0a673769-c3bb-41e8-a5b2-a3e6edd54fdd",
+      "name": "IN_PROGRESS",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "v4LzH1ssgU29000E",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Templates Workflow \n\n### Cisco cdFMC Templates API Endpoints\n\n| API Name                                      | Description                                             | Endpoint                                                                                                         |\n|----------------------------------------------|---------------------------------------------------------|------------------------------------------------------------------------------------------------------------------|\n| Get All Device Templates                      | Returns all available device templates.                | `/v1/cdfmc/api/fmc_config/v1/domain/:domainUUID/templates/devicetemplates`                                     |\n| Create Device Template                        | Creates a new device template.                         | `/v1/cdfmc/api/fmc_config/v1/domain/:domainUUID/templates/devicetemplates`                                     |\n| Delete Device Template                        | Deletes the specified device template.                 | `/v1/cdfmc/api/fmc_config/v1/domain/:domainUUID/templates/devicetemplates/:templateUUID`                       |\n| Get Device Templates                          | Retrieves templates within the specified container.    | `/v1/cdfmc/api/fmc_config/v1/domain/:domainUUID/templates/devicetemplates/:containerUUID`                      |\n| Update Device Template                        | Updates a specific device template.                    | `/v1/cdfmc/api/fmc_config/v1/domain/:domainUUID/templates/devicetemplates/:templateUUID`                       |\n| Get Device Template Object Overrides          | Retrieves the object overrides for a device template.  | `/v1/cdfmc/api/fmc_config/v1/domain/:domainUUID/templates/devicetemplateobjectoverrides/:templateUUID`         |\n| Update Device Template Object Overrides       | Updates the object overrides in a device template.     | `/v1/cdfmc/api/fmc_config/v1/domain/:domainUUID/templates/devicetemplateobjectoverrides/:templateUUID`         |\n| Apply Device Template                         | Applies a device template to one or more devices.      | `/v1/cdfmc/api/fmc_config/v1/domain/:domainUUID/templates/devicetemplateapply`                                 |\n| Get All FTD Template Physical Interface       | Lists all physical interfaces for an FTD template.     | `/v1/cdfmc/api/fmc_config/v1/domain/:domainUUID/templates/ftdphysicalinterfaces`                               |\n| Create FTD Template Physical Interface        | Creates a physical interface in an FTD template.       | `/v1/cdfmc/api/fmc_config/v1/domain/:domainUUID/templates/ftdphysicalinterfaces`                               |\n| Delete FTD Template Physical Interface        | Deletes a physical interface from an FTD template.     | `/v1/cdfmc/api/fmc_config/v1/domain/:domainUUID/templates/ftdphysicalinterfaces/:interfaceUUID`                |\n| Get FTD Template Physical Interface           | Retrieves a specific physical interface.               | `/v1/cdfmc/api/fmc_config/v1/domain/:domainUUID/templates/ftdphysicalinterfaces/:interfaceUUID`                |\n| Get Device Template Variables                 | Retrieves variables used in a device template.         | `/v1/cdfmc/api/fmc_config/v1/domain/:domainUUID/templates/devicetemplatevariables/:templateUUID`               |\n| Get All Vpn Setting Model                     | Lists all VPN settings models.                         | `/v1/cdfmc/api/fmc_config/v1/domain/:domainUUID/templates/vpnsettingsmodels`                                   |\n| Create Vpn Setting Model                      | Creates a new VPN setting model.                       | `/v1/cdfmc/api/fmc_config/v1/domain/:domainUUID/templates/vpnsettingsmodels`                                   |\n| Delete Vpn Setting Model                      | Deletes a VPN setting model.                           | `/v1/cdfmc/api/fmc_config/v1/domain/:domainUUID/templates/vpnsettingsmodels/:modelUUID`                        |\n| Get Vpn Setting Model                         | Retrieves a specific VPN setting model.                | `/v1/cdfmc/api/fmc_config/v1/domain/:domainUUID/templates/vpnsettingsmodels/:modelUUID`                        |\n| Update Vpn Setting Model                      | Updates a VPN setting model.                           | `/v1/cdfmc/api/fmc_config/v1/domain/:domainUUID/templates/vpnsettingsmodels/:modelUUID`                        |\n| Create Device Template Conversion Request     | Initiates a conversion of device configuration.        | `/v1/cdfmc/api/fmc_config/v1/domain/:domainUUID/templates/devicetemplateconversionrequests`                    |\n| Get All Supported Device Model                | Lists all supported device models.                     | `/v1/cdfmc/api/fmc_config/v1/domain/:domainUUID/templates/supporteddevicemodels`                               |\n| Get Supported Device Model                    | Retrieves a specific supported device model.           | `/v1/cdfmc/api/fmc_config/v1/domain/:domainUUID/templates/supporteddevicemodels/:modelUUID`                    |\n",
+        "height": 840,
+        "width": 2800
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        900
+      ],
+      "id": "1c6f551b-525a-40dc-bbc9-6e00ec62903b",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## Main workflow\n(Activate to run automatically)",
+        "height": 820,
+        "width": 2800,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "96c71092-8268-4003-84df-0b53fa00eafb",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        60,
+        1540
+      ],
+      "id": "2f30b2f0-a5ea-424d-8e79-2324f43dfaa8",
+      "name": "Get Templates"
+    },
+    {
+      "parameters": {
+        "url": "https://cdo-cisco-bayuan.app.us.cdo.cisco.com/api/fmc_platform/v1/info/domain",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        340,
+        1540
+      ],
+      "id": "233c81b6-f698-4ba2-86e2-67b7f968b36d",
+      "name": "getDomains",
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "jWZsbkqDf4nTUcMU",
+          "name": "SCC Bearer"
+        },
+        "httpHeaderAuth": {
+          "id": "FICWngHBkvM6APl3",
+          "name": "SCC Header"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "=https://api.us.security.cisco.com/firewall/v1/cdfmc/api/fmc_config/v1/domain/{{ $json.items[0].uuid }}/templates/devicetemplates",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        580,
+        1540
+      ],
+      "id": "9aa5f5ae-8db1-4984-aa5b-cd095b8f2f7f",
+      "name": "getTemplates",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "FICWngHBkvM6APl3",
+          "name": "SCC Header"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1mLdFohsvYNO72lxbMsVWnizA_8hpuvKXOPnCI-Xgvqs",
+          "mode": "list",
+          "cachedResultName": "Firewall Automation",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1mLdFohsvYNO72lxbMsVWnizA_8hpuvKXOPnCI-Xgvqs/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 918271864,
+          "mode": "list",
+          "cachedResultName": "Template",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1mLdFohsvYNO72lxbMsVWnizA_8hpuvKXOPnCI-Xgvqs/edit#gid=918271864"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Template ID": "={{ $json.id }}",
+            "Name": "={{ $json.name }}"
+          },
+          "matchingColumns": [
+            "Template ID"
+          ],
+          "schema": [
+            {
+              "id": "Template ID",
+              "displayName": "Template ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1060,
+        1540
+      ],
+      "id": "16606f56-0c83-4b19-b211-825cb61f972f",
+      "name": "writeTemplates",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "v4LzH1ssgU29000E",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Read Templates and update Googlesheet",
+        "height": 260,
+        "width": 1100,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        240,
+        1440
+      ],
+      "id": "001c1f9c-1975-48ef-a985-ba69a7f78408",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "items",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        820,
+        1540
+      ],
+      "id": "554b939a-9c5f-4e71-bb5e-b381ca5307ba",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "errorMessage": "Provision Failed"
+      },
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [
+        1940,
+        620
+      ],
+      "id": "e6d92f93-ba39-4221-94e0-f4fe50f1ba0c",
+      "name": "Stop and Error"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "ZTP": {
+      "main": [
+        [
+          {
+            "node": "Provision Susccessful?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Provision Susccessful?": {
+      "main": [
+        [
+          {
+            "node": "Provision Status",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Failed Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SN to Model Lookup": {
+      "main": [
+        [
+          {
+            "node": "Auto Fill",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SN Provided?": {
+      "main": [
+        [
+          {
+            "node": "Command",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Error SN missing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Error SN missing": {
+      "main": [
+        [
+          {
+            "node": "Stop and Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Command": {
+      "main": [
+        [
+          {
+            "node": "Read Template",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Template ID?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Template": {
+      "main": [
+        [
+          {
+            "node": "Get Bearer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "New Tasks": {
+      "main": [
+        [
+          {
+            "node": "SN Provided?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Check Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Status": {
+      "main": [
+        [
+          {
+            "node": "Recheck status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Provision Status": {
+      "main": [
+        [
+          {
+            "node": "IN_PROGRESS",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Failed Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Recheck status": {
+      "main": [
+        [
+          {
+            "node": "Success status",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Failed Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Failed Status": {
+      "main": [
+        [
+          {
+            "node": "Stop and Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Bearer": {
+      "main": [
+        [
+          {
+            "node": "SN to Model Lookup",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Template ID?": {
+      "main": [
+        [
+          {
+            "node": "ZTP",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Warn no Template",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Warn no Template": {
+      "main": [
+        [
+          {
+            "node": "Stop and Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IN_PROGRESS": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Templates": {
+      "main": [
+        [
+          {
+            "node": "getDomains",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "getDomains": {
+      "main": [
+        [
+          {
+            "node": "getTemplates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "getTemplates": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "writeTemplates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "",
+  "meta": {
+    "instanceId": "a1589ac785acbec685413f0474720036bc0b0696f0d33e90d0facbd53e4104a9"
+  },
+  "tags": []
+}
