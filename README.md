@@ -59,8 +59,7 @@ This repository contains an n8n workflow for automating firewall provisioning us
 
 The workflow relies on Cisco APIs for provisioning tasks, using two main credentials:
 
-- **SCC Header:** For HTTP header authentication.
-- **SCC Bearer:** For accessing Bearer tokens via Cisco’s OAuth2 endpoint.
+A. **Cisco API**
 
 **Setup Steps:**
 
@@ -68,6 +67,11 @@ The workflow relies on Cisco APIs for provisioning tasks, using two main credent
 2. In n8n, navigate to **Credentials** and create a new credential using **HTTP Header Auth** for SCC Header.
 3. Also create a credential for **HTTP Bearer Auth** for SCC Bearer.
 4. Replace placeholders (e.g., `!!!YOUR_CLIENT_ID` and `!!!YOUR_CLIENT_SECRET`) found in the workflow nodes with your actual values.
+
+B. **Secure Cloud Control API**
+Get the following from Secure Cloud Control
+- **SCC Header:** For HTTP header authentication.
+- **SCC Bearer:** For accessing Bearer tokens via Cisco’s OAuth2 endpoint.
 
 ### Google Sheets Credentials
 
